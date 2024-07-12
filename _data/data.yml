@@ -62,13 +62,11 @@ education:
       - degree: Bsc in Information Technology
         university: Jomo Kenyatta University of Agriculture and Technology
         time: 2020 - 2023
-        details: |
-          Graduated with Second Class Honours, Upper Division
+        Graduated with Second Class Honours, Upper Division
       - diploma: Diploma in Information Technology
         university: Jomo Kenyatta University of Agriculture and Technology
         time: 2017 - 2019
-        details: |
-          Graduated with 'Creadit'
+        Graduated with 'Credit'
 
 experiences:
     title: Experiences
