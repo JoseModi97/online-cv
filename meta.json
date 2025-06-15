@@ -1,0 +1,5 @@
+---
+permalink: /meta.json
+---
+{"buildTime": "{{ site.time | date_to_xmlschema }}"}
+
