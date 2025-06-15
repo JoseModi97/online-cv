@@ -80,7 +80,7 @@ skills:
       level: 80%
     - name: React
       level: 75%
-    - name: SQL/PostgreSQL/MySQL/Oracle
+    - name: SQL
       level: 85%
     - name: Bootstrap & jQuery
       level: 80%
