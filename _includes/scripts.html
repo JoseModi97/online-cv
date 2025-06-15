@@ -4,31 +4,46 @@
 <script>
 (function() {
   var currentBuild = "{{ site.time | date_to_xmlschema }}";
+
+  function injectStyles() {
+    var style = document.createElement('style');
+    style.textContent =
+      '#refresh-notice{position:fixed;left:50%;bottom:20%;transform:translateX(-50%);z-index:1060;display:none;min-width:20rem;border-radius:.5rem;backdrop-filter:blur(10px);background:rgba(255,255,255,0.9);color:#000;box-shadow:0 0 1rem rgba(0,0,0,.1);text-align:center;padding:1rem;}'+
+      '#refresh-notice.show{display:block;animation:popup 0.6s;}'+
+      '#refresh-notice button{margin-top:.5rem;}'+
+      '@keyframes popup{from{opacity:0;bottom:0}to{opacity:1;bottom:20%}}';
+    document.head.appendChild(style);
+  }
+
+  function showNotice() {
+    var box = document.getElementById('refresh-notice');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'refresh-notice';
+      box.innerHTML = '<p class="mb-2">A new version is available.</p>'+
+                      '<button id="refresh-btn" class="btn btn-primary">Refresh</button>';
+      document.body.appendChild(box);
+      document.getElementById('refresh-btn').onclick = function() { location.reload(true); };
+    }
+    box.classList.add('show');
+  }
+
   function checkUpdate() {
     fetch("{{ '/meta.json' | relative_url }}?_=" + Date.now())
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.buildTime && data.buildTime !== currentBuild) {
-          var banner = document.createElement('div');
-          banner.textContent = 'New version available. Click to refresh.';
-          banner.style.position = 'fixed';
-          banner.style.bottom = '0';
-          banner.style.left = '0';
-          banner.style.right = '0';
-          banner.style.background = '#ffc';
-          banner.style.color = '#000';
-          banner.style.padding = '10px';
-          banner.style.textAlign = 'center';
-          banner.style.cursor = 'pointer';
-          banner.onclick = function() { location.reload(true); };
-          document.body.appendChild(banner);
+          showNotice();
         } else {
           setTimeout(checkUpdate, 60000);
         }
-      }).catch(function() {
+      })
+      .catch(function() {
         setTimeout(checkUpdate, 60000);
       });
   }
+
+  injectStyles();
   setTimeout(checkUpdate, 60000);
 })();
 </script>
