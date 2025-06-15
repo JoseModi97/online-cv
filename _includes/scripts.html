@@ -4,31 +4,48 @@
 <script>
 (function() {
   var currentBuild = "{{ site.time | date_to_xmlschema }}";
+
+  function injectStyles() {
+    var style = document.createElement('style');
+    style.textContent =
+      '#refresh-btn{position:fixed;bottom:20px;right:20px;background:#ffc;color:#000;border:1px solid #ccc;padding:10px 15px;border-radius:4px;cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;}'+
+      '#refresh-btn.show{opacity:1;transform:translateY(0);}'+
+      '@keyframes pulse{0%{box-shadow:0 0 0 rgba(0,0,0,0);}100%{box-shadow:0 0 10px rgba(0,0,0,.2);}}'+
+      '#refresh-btn.pulse{animation:pulse 1s infinite alternate;}';
+    document.head.appendChild(style);
+  }
+
+  function showButton() {
+    var btn = document.getElementById('refresh-btn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'refresh-btn';
+      btn.textContent = 'Refresh';
+      btn.onclick = function() { location.reload(true); };
+      document.body.appendChild(btn);
+      requestAnimationFrame(function(){
+        btn.classList.add('show');
+        btn.classList.add('pulse');
+      });
+    }
+  }
+
   function checkUpdate() {
     fetch("{{ '/meta.json' | relative_url }}?_=" + Date.now())
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.buildTime && data.buildTime !== currentBuild) {
-          var banner = document.createElement('div');
-          banner.textContent = 'New version available. Click to refresh.';
-          banner.style.position = 'fixed';
-          banner.style.bottom = '0';
-          banner.style.left = '0';
-          banner.style.right = '0';
-          banner.style.background = '#ffc';
-          banner.style.color = '#000';
-          banner.style.padding = '10px';
-          banner.style.textAlign = 'center';
-          banner.style.cursor = 'pointer';
-          banner.onclick = function() { location.reload(true); };
-          document.body.appendChild(banner);
+          showButton();
         } else {
           setTimeout(checkUpdate, 60000);
         }
-      }).catch(function() {
+      })
+      .catch(function() {
         setTimeout(checkUpdate, 60000);
       });
   }
+
+  injectStyles();
   setTimeout(checkUpdate, 60000);
 })();
 </script>
