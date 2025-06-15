@@ -1,2 +1,36 @@
 <!-- Javascript -->
 {% if site.analytics %} {% include analytics.html %} {% endif %}
+
+<script>
+(function() {
+  var currentBuild = "{{ site.time | date_to_xmlschema }}";
+  function checkUpdate() {
+    fetch("{{ '/meta.json' | relative_url }}?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.buildTime && data.buildTime !== currentBuild) {
+          var banner = document.createElement('div');
+          banner.textContent = 'New version available. Click to refresh.';
+          banner.style.position = 'fixed';
+          banner.style.bottom = '0';
+          banner.style.left = '0';
+          banner.style.right = '0';
+          banner.style.background = '#ffc';
+          banner.style.color = '#000';
+          banner.style.padding = '10px';
+          banner.style.textAlign = 'center';
+          banner.style.cursor = 'pointer';
+          banner.onclick = function() { location.reload(true); };
+          document.body.appendChild(banner);
+        } else {
+          setTimeout(checkUpdate, 60000);
+        }
+      }).catch(function() {
+        setTimeout(checkUpdate, 60000);
+      });
+  }
+  setTimeout(checkUpdate, 60000);
+})();
+</script>
+
+
