@@ -1,6 +1,6 @@
 sidebar:
   position: right
-  about: true
+  about: false
   education: true
   name: Joseph Modi Odhiambo
   tagline: Software Developer
