@@ -62,6 +62,9 @@ projects:
       tagline: Tools for staff to view, filter and manage carsticker applications.
     - title: Student Records Management
       tagline: Modules for managing transfers, withdrawals and enrollment lists.
+    - title: Kickstarter Pledges
+      tagline: Top 100 Most Pledged Kickstarter Campaigns Grouped by Category
+      link: https://codepen.io/Modi-Joe/full/pvjgYBG
 certifications:
   title: Certifications
   list:
